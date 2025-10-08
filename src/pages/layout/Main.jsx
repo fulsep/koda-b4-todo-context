@@ -6,10 +6,16 @@ import TodoContext from '../../components/TodoContext'
 
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
+  const [showModalDelete, setShowModalDelete] = React.useState(false)
+  const [deleteIndex, setDeleteIndex] = React.useState(null)
   const [todo, setTodo] = React.useState([])
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
-      <ModalContext.Provider value={{showModal, setShowModal}}>
+      <ModalContext.Provider value={{
+        showModal, setShowModal,
+        showModalDelete, setShowModalDelete,
+        deleteIndex, setDeleteIndex
+      }}>
         <div className='bg-gray-200 min-h-screen relative'>
           <div className='max-w-md w-full mx-auto relative'>
             <div className='p-2 bg-gray-100 min-h-[calc(theme(height.screen)-theme(height.12))] flex flex-col'>
@@ -17,6 +23,7 @@ function Main() {
             </div>
             <Navbar />
             {showModal && <Modal />}
+            {showModalDelete && <ModalHapus />}
           </div>
         </div>
       </ModalContext.Provider>
@@ -79,6 +86,43 @@ const Modal = ()=>{
             </button>
           </div>
         </form>
+      </div>
+    </div>
+  )
+}
+
+const ModalHapus = () => {
+  const todoCtx = React.useContext(TodoContext)
+  const modalCtx = React.useContext(ModalContext)
+
+  function handleDelete() {
+    const deleteTask = todoCtx.data.filter((_, i) => i !== modalCtx.deleteIndex)
+    todoCtx.setData(deleteTask)
+    modalCtx.setShowModalDelete(false)
+    modalCtx.setDeleteIndex(null)
+  }
+  function cancelDelete() {
+    modalCtx.setShowModalDelete(false)
+    modalCtx.setDeleteIndex(null)
+  }
+
+  return (
+    <div className='absolute top-0 left-0 max-w-md w-full h-screen z-10 bg-black/30  flex justify-center items-center'>
+      <div className="rounded-lg p-5 w-80 bg-white shadow-xl m-auto">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-lg font-semibold">Delete Task?</h3>
+        </div>
+        <p className="text-sm text-gray-600 mb-5">
+          Are you sure deleting this Task?
+        </p>
+        <div className="flex justify-end gap-3">
+          <button onClick={cancelDelete} className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm">
+            Cancel
+          </button>
+          <button onClick={handleDelete} className="px-4 py-1 rounded bg-red-500 text-white hover:bg-red-600 text-sm">
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   )
