@@ -45,7 +45,7 @@ function HomePage() {
                     onClose={() => setShowModalDelete(false)}
                     onConfirm={()=>handleDelete(todo.id)}
                   />
-                  <button onClick={() => setShowModalDelete(true)}>
+                  <button onClick={() => setShowModalDelete(true)} className='cursor-pointer'>
                     <Trash />
                   </button>
                 </div>
