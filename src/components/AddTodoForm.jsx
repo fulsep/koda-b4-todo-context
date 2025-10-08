@@ -32,7 +32,7 @@ function AddTodoForm(props) {
           {[...Array(24)].map((_, hour) => {
             const strHour = hour.toString()
             const len = strHour.length
-            return (<option>{len > 1 ? strHour : '0' + strHour}:00</option>)
+            return (<option key={hour}>{len > 1 ? strHour : '0' + strHour}:00</option>)
           })}
         </select>
       </div>
