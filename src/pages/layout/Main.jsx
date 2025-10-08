@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
-import ModalContext from '../../components/ModalContext'
+import { TodoModalContext } from '../../components/ModalContext'
 import TodoContext from '../../components/TodoContext'
 
 function Main() {
@@ -28,7 +28,7 @@ function Main() {
 
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo, deleteTodo: deleteTodo}}>
-      <ModalContext.Provider value={{showModal, setShowModal}}>
+      <TodoModalContext.Provider value={{showModal, setShowModal}}>
         <div className='bg-gray-200 min-h-screen relative'>
           <div className='max-w-md w-full mx-auto relative'>
             <div className='p-2 bg-gray-100 min-h-[calc(theme(height.screen)-theme(height.12))] flex flex-col'>
@@ -38,13 +38,13 @@ function Main() {
             {showModal && <Modal />}
           </div>
         </div>
-      </ModalContext.Provider>
+      </TodoModalContext.Provider>
     </TodoContext.Provider>
   )
 }
 
 const Modal = ()=>{
-  const modalCtx = React.useContext(ModalContext)
+  const modalCtx = React.useContext(TodoModalContext)
   const todoCtx = React.useContext(TodoContext)
   const formRef = React.useRef()
   const handleData = (e)=>{
