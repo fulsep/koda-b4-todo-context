@@ -1,11 +1,18 @@
 import moment from 'moment'
-import React from 'react'
+import React, { useState } from 'react'
 import TodoContext from '../components/TodoContext'
+import { Trash } from 'lucide-react'
+import ModalDelete from "../components/ModalDelete"
 
 function HomePage() {
   const [selectedDay, setDay] = React.useState(moment().date().toString())
   const weeks = ["Mon", "Tue", "Wed","Thu", "Fri", "Sat", "Sun"]
   const todoCtx = React.useContext(TodoContext)
+  const [showModalDelete, setShowModalDelete] = useState(false)
+  const handleDelete = (idTask) => {
+    const updatedTasks = todoCtx.data.filter((item) => item.id !== idTask);
+    todoCtx.setData(updatedTasks);
+  }
   return (
     <>
       <div className='sticky top-0 px-10 py-5 flex flex-col gap-5'>
@@ -31,7 +38,17 @@ function HomePage() {
             <div className='bg-blue-500 text-white p-5 rounded'>
               <div className='flex justify-between'>
                 <div className='font-bold'>{todo.title}</div>
-                <div>{todo.time}</div>
+                <div className='flex items-center gap-2'>
+                  <div>{todo.time}</div>
+                  <ModalDelete
+                    isOpen={showModalDelete}
+                    onClose={() => setShowModalDelete(false)}
+                    onConfirm={()=>handleDelete(todo.id)}
+                  />
+                  <button onClick={() => setShowModalDelete(true)}>
+                    <Trash />
+                  </button>
+                </div>
               </div>
               <div className='whitespace-pre'>{todo.body}</div>
             </div>

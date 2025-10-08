@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
 import ModalContext from '../../components/ModalContext'
@@ -6,7 +6,19 @@ import TodoContext from '../../components/TodoContext'
 
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
-  const [todo, setTodo] = React.useState([])
+  const [todo, setTodo] = React.useState(() => {
+    try {
+      const data = window.localStorage.getItem("todo");
+      return data ? JSON.parse(data) : [];
+    } catch (error) {
+      console.log("Failed to parse tasks from localStorage:", error);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem("todo", JSON.stringify(todo));
+  }, [todo]);
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
       <ModalContext.Provider value={{showModal, setShowModal}}>
@@ -30,12 +42,13 @@ const Modal = ()=>{
   const formRef = React.useRef()
   const handleData = (e)=>{
     e.preventDefault()
+    const id = Date.now()
     const {value: title} = e.target.title
     const {value: body} = e.target.body
     const {value: time} = e.target.time
     todoCtx.setData([
       ...todoCtx.data,
-      {title,body,time}
+      {id,title,body,time}
     ])
     toggleModal()
   }
