@@ -20,7 +20,7 @@ function HomePage() {
         <div>{moment().format("MMM DD, YYYY")}</div>
         <div className='text-3xl font-bold'>Today</div>
         {showMessage && (
-          <div className='absolute top-95 right-30 bg-green-500 hover:bg-red-400 text-white py-4 rounded-lg animate-bounce'>
+          <div className='absolute top-95 right-31 bg-green-500 hover:bg-red-400 text-white py-4 rounded-lg animate-bounce'>
             {showMessage}
           </div>
         )}
