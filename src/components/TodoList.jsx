@@ -1,25 +1,34 @@
 import React, { useContext } from 'react'
 import TodoContext from './TodoContext'
-import { FaTrash } from 'react-icons/fa6'
-import {DeleteModalContext} from './ModalContext'
+import { FaPencil, FaTrash } from 'react-icons/fa6'
+import {DeleteModalContext, EditModalContext} from './ModalContext'
 import Modal from './Modal'
+import TodoForm from './TodoForm'
 
 function TodoList() {
   const [showModal, setShowModal] = React.useState(false)
+  const [showEdit, setShowEdit] = React.useState(false)
   const todoCtx = React.useContext(TodoContext)
   const [selectedItem, setSelectedItem] = React.useState(null)
-  const toggleModal = (idx)=>{
+  const toggleModalDelete = (id)=>{
     setShowModal(!showModal)
-    setSelectedItem(idx)
+    setSelectedItem(id)
+  }
+  const toggleModalEdit = (id)=>{
+    setShowEdit(!showEdit)
+    setSelectedItem(id)
   }
   return (
     <DeleteModalContext.Provider value={{showModal, setShowModal}}>
-      <div className='flex flex-col gap-5 mb-24'>
-        {todoCtx.data.map((todo,idx) => {
-          return (<TodoItem todo={todo} index={idx} onAction={()=>toggleModal(idx)} />)
-        })}
-        <DeleteModal item={selectedItem} />
-      </div>
+      <EditModalContext.Provider value={{showModal: showEdit, setShowModal: setShowEdit}}>
+        <div className='flex flex-col gap-5 mb-24'>
+          {todoCtx.data.map((todo) => {
+            return (<TodoItem key={todo.id} todo={todo} onDelete={()=>toggleModalDelete(todo.id)} onEdit={()=>toggleModalEdit(todo.id)} />)
+          })}
+          <DeleteModal item={selectedItem} />
+          <EditModal idTodo={selectedItem} />
+        </div>
+      </EditModalContext.Provider>
     </DeleteModalContext.Provider>
   )
 }
@@ -34,14 +43,22 @@ const TodoItem = (props)=>{
       </div>
       <div className='whitespace-pre'>{props.todo.body}</div>
       {showOptions ? <div onDoubleClick={()=>setShowOptions(!showOptions)} className='flex absolute top-0 left-0 flex-col px-5 justify-center items-end w-full h-full bg-linear-to-r from-transparent to-blue-500'>
-        <button onClick={()=>props.onAction(props.index)} className='text-red-300'>
+        <button onClick={()=>props.onDelete(props.id)} className='text-red-300 cursor-pointer'>
           <FaTrash size={28} />
+        </button>
+        <button onClick={()=>props.onEdit(props.todo.id)} className='text-white cursor-pointer'>
+          <FaPencil size={28} />
         </button>
       </div> : <>
         <div className='group-hover:flex absolute top-0 left-0 hidden flex-col px-5 justify-center items-end w-full h-full bg-linear-to-r from-transparent to-blue-500'>
-          <button onClick={()=>props.onAction(props.index)} className='text-red-300'>
-            <FaTrash size={28} />
-          </button>
+          <div className='flex items-center gap-2'>
+            <button onClick={()=>props.onDelete(props.todo.id)} className='text-red-300 cursor-pointer'>
+              <FaTrash size={28} />
+            </button>
+            <button onClick={()=>props.onEdit(props.todo.id)} className='text-white cursor-pointer'>
+              <FaPencil size={28} />
+            </button>
+          </div>
         </div>
       </>}
     </div>
@@ -53,7 +70,7 @@ const DeleteModal = (props)=>{
   const modalCtx = useContext(DeleteModalContext)
 
   const confirmDelete = ()=>{
-    todoCtx.setData(todoCtx.data.filter((_,index)=>index!==props.item))
+    todoCtx.setData(todoCtx.data.filter((data)=>data.id!==props.item))
     modalCtx.setShowModal(false)
   }
 
@@ -69,6 +86,19 @@ const DeleteModal = (props)=>{
             <span>Yes</span>
           </button>
         </div>
+      </Modal>
+    )
+  }
+  return (<></>)
+}
+
+const EditModal = (props)=>{
+  const todoCtx = useContext(TodoContext)
+  const modalCtx = useContext(EditModalContext)
+  if(modalCtx.showModal){
+    return(
+      <Modal modalCtx={modalCtx} title="Edit Todo">
+        <TodoForm todoCtx={todoCtx} idTodo={props.idTodo} onClose={()=>modalCtx.setShowModal(false)} />
       </Modal>
     )
   }
