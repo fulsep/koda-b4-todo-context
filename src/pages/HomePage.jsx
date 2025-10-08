@@ -1,28 +1,14 @@
 import moment from 'moment'
-import React, { useState } from 'react'
+import React from 'react'
 import TodoContext from '../components/TodoContext'
 import TodoList from '../components/TodoList'
 
 function HomePage() {
-  const {showModalDelete, setShowModalDelete} = React.useContext(ModalDeleteContext)
   const [selectedDay, setDay] = React.useState(moment().date().toString())
   const weeks = ["Mon", "Tue", "Wed","Thu", "Fri", "Sat", "Sun"]
   const todoCtx = React.useContext(TodoContext)
-  const [idDelete, setIdDelete] = useState("")
-  const handleDelete = () => {
-    const updatedTasks = todoCtx.data.filter((item) => item.id !== idDelete);
-    todoCtx.setData(updatedTasks);
-    setIdDelete("")
-    setShowModalDelete(false)
-  }
   return (
     <>
-      {showModalDelete && 
-        <Modal title="Confirm Delete">
-          <ConfirmDelete onConfirm={()=>handleDelete()} onClose={()=>setShowModalDelete(false)} />
-        </Modal>
-      }
-      
       <div className='sticky top-0 px-10 py-5 flex flex-col gap-5'>
         <div>{moment().format("MMM DD, YYYY")}</div>
         <div className='text-3xl font-bold'>Today</div>
