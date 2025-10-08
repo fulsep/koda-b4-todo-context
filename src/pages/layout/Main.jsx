@@ -4,11 +4,22 @@ import Navbar from '../../components/Navbar'
 import {TodoModalContext} from '../../components/ModalContext'
 import Modal from '../../components/Modal'
 import TodoContext from '../../components/TodoContext'
-import AddTodoForm from '../../components/AddTodoForm'
+import TodoForm from '../../components/TodoForm'
 
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
-  const [todo, setTodo] = React.useState([])
+  const [todo, setTodo] = React.useState(()=>{
+    try {
+      const data = window.localStorage.getItem("todo")
+      return data ? JSON.parse(data) : []
+    } catch (error) {
+      console.log(error)
+      return []
+    }
+  })
+  React.useEffect(()=>{
+    window.localStorage.setItem("todo", JSON.stringify(todo))
+  },[todo])
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
       <TodoModalContext.Provider value={{showModal, setShowModal}}>
@@ -31,7 +42,7 @@ const AddTodoModal = ()=>{
   const todoCtx = React.useContext(TodoContext)
   return(
     <Modal modalCtx={modalCtx} title="Add New Todo">
-      <AddTodoForm todoCtx={todoCtx} onClose={()=>modalCtx.setShowModal(false)} />
+      <TodoForm todoCtx={todoCtx} onClose={()=>modalCtx.setShowModal(false)} />
     </Modal>
   )
 }
