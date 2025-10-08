@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '../../components/Navbar'
-import ModalContext from '../../components/ModalContext'
+import {TodoModalContext} from '../../components/ModalContext'
 import Modal from '../../components/Modal'
 import TodoContext from '../../components/TodoContext'
 import AddTodoForm from '../../components/AddTodoForm'
@@ -11,7 +11,7 @@ function Main() {
   const [todo, setTodo] = React.useState([])
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
-      <ModalContext.Provider value={{showModal, setShowModal}}>
+      <TodoModalContext.Provider value={{showModal, setShowModal}}>
         <div className='bg-gray-200 min-h-screen relative'>
           <div className='max-w-md w-full mx-auto relative'>
             <div className='p-2 bg-gray-100 min-h-[calc(theme(height.screen)-theme(height.12))] flex flex-col'>
@@ -21,16 +21,16 @@ function Main() {
             {showModal && <AddTodoModal />}
           </div>
         </div>
-      </ModalContext.Provider>
+      </TodoModalContext.Provider>
     </TodoContext.Provider>
   )
 }
 
 const AddTodoModal = ()=>{
-  const modalCtx = React.useContext(ModalContext)
+  const modalCtx = React.useContext(TodoModalContext)
   const todoCtx = React.useContext(TodoContext)
   return(
-    <Modal title="Add New Todo">
+    <Modal modalCtx={modalCtx} title="Add New Todo">
       <AddTodoForm todoCtx={todoCtx} onClose={()=>modalCtx.setShowModal(false)} />
     </Modal>
   )

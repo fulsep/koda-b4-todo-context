@@ -1,9 +1,8 @@
 import React from 'react'
-import ModalContext from './ModalContext'
 import { FaX } from 'react-icons/fa6'
 
 const Modal = (props)=>{
-  const modalCtx = React.useContext(ModalContext)
+  const modalCtx = props.modalCtx
   const toggleModal = ()=>{
     modalCtx.setShowModal(!modalCtx.showModal)
   }
