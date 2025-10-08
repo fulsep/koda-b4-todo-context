@@ -8,6 +8,7 @@ const TodoContext = React.createContext({
       time: ""
     }
   ],
+  deleteTodo: ()=>{},
   setData: ()=>{}
 })
 

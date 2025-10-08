@@ -7,8 +7,27 @@ import TodoContext from '../../components/TodoContext'
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
   const [todo, setTodo] = React.useState([])
+
+  const deleteTodo = (idToDelete) => {
+    setTodo(prevTodos => prevTodos.filter(todo => todo.id !== idToDelete))
+  }
+
+  React.useEffect(() => {
+    const getData = window.localStorage.getItem("todos")
+    if (getData) {
+      const parsedData = JSON.parse(getData)
+      setTodo(parsedData)    
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (todo.length > 0) { 
+      window.localStorage.setItem("todos", JSON.stringify(todo))
+    }
+  }, [todo])
+
   return (
-    <TodoContext.Provider value={{data:todo, setData: setTodo}}>
+    <TodoContext.Provider value={{data:todo, setData: setTodo, deleteTodo: deleteTodo}}>
       <ModalContext.Provider value={{showModal, setShowModal}}>
         <div className='bg-gray-200 min-h-screen relative'>
           <div className='max-w-md w-full mx-auto relative'>
