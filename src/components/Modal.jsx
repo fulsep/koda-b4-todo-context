@@ -1,11 +1,9 @@
 import React from 'react'
-import ModalContext from './ModalContext'
 import { FaX } from 'react-icons/fa6'
 
 const Modal = (props)=>{
-  const modalCtx = React.useContext(ModalContext)
   const toggleModal = ()=>{
-    modalCtx.setShowModal(!modalCtx.showModal)
+    props.modalCtx.setShowModal(!props.modalCtx.showModal)
   }
   const animatedDiv = React.createRef()
   React.useEffect(()=>{

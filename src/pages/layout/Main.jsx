@@ -26,7 +26,7 @@ function Main() {
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
       <ModalContext.Provider value={{showModal, setShowModal}}>
-        <ModalDeleteContext.Provider value={{showModalDelete, setShowModalDelete}}>
+        <ModalDeleteContext.Provider value={{showModal: showModalDelete, setShowModal: setShowModalDelete}}>
           <div className='bg-gray-200 min-h-screen relative'>
             <div className='max-w-md w-full mx-auto relative'>
               <div className='p-2 bg-gray-100 min-h-[calc(theme(height.screen)-theme(height.12))] flex flex-col'>
@@ -46,7 +46,7 @@ const AddTodoModal = ()=>{
   const modalCtx = React.useContext(ModalContext)
   const todoCtx = React.useContext(TodoContext)
   return(
-    <Modal title="Add New Todo">
+    <Modal title="Add New Todo" modalCtx={modalCtx}>
       <AddTodoForm todoCtx={todoCtx} onClose={()=>modalCtx.setShowModal(false)} />
     </Modal>
   )

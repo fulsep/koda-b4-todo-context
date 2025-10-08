@@ -1,8 +1,8 @@
 import React from "react"
 
 const ModalDeleteContext = React.createContext({
-  showModalDelete: false,
-  setShowModalDelete: ()=>{}
+  showModal: false,
+  setShowModal: ()=>{}
 })
 
 export default ModalDeleteContext

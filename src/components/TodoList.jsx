@@ -7,19 +7,19 @@ import { FaRegTrashAlt } from 'react-icons/fa'
 
 function TodoList() {
   const todoCtx = React.useContext(TodoContext)
-  const {showModalDelete, setShowModalDelete} = React.useContext(ModalDeleteContext)
+  const modalCtx = React.useContext(ModalDeleteContext)
   const [idDelete, setIdDelete] = useState("")
   const handleDelete = () => {
     const updatedTasks = todoCtx.data.filter((item) => item.id !== idDelete);
     todoCtx.setData(updatedTasks);
     setIdDelete("")
-    setShowModalDelete(false)
+    modalCtx.setShowModal(false)
   }
   return (
     <div className='flex flex-col gap-5 mb-24'>
-      {showModalDelete && 
-        <Modal title="Confirm Delete">
-          <ConfirmDelete onConfirm={()=>handleDelete()} onClose={()=>setShowModalDelete(false)} />
+      {modalCtx.showModal && 
+        <Modal title="Confirm Delete" modalCtx={modalCtx}>
+          <ConfirmDelete onConfirm={()=>handleDelete()} onClose={()=>modalCtx.setShowModal(false)} />
         </Modal>
       }
       {todoCtx.data.map(todo => {
@@ -31,7 +31,7 @@ function TodoList() {
                 <div>{todo.time}</div>
                 <button onClick={()=>{
                   setIdDelete(todo.id)
-                  setShowModalDelete(!showModalDelete)}}>
+                  modalCtx.setShowModal(!modalCtx.showModal)}}>
                   <FaRegTrashAlt />
                 </button>
               </div>
