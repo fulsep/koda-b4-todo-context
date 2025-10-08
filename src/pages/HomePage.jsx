@@ -1,10 +1,7 @@
 import moment from 'moment'
 import React, { useState } from 'react'
 import TodoContext from '../components/TodoContext'
-import { FaRegTrashAlt } from 'react-icons/fa'
-import Modal from '../components/Modal'
-import ConfirmDelete from '../components/ConfirmDelete'
-import ModalDeleteContext from '../components/ModalDeleteContext'
+import TodoList from '../components/TodoList'
 
 function HomePage() {
   const {showModalDelete, setShowModalDelete} = React.useContext(ModalDeleteContext)
@@ -43,27 +40,7 @@ function HomePage() {
       {todoCtx.data.length === 0 && <div className='flex-1 flex justify-center items-center'>
         <span>No Activity!</span>
       </div>}
-      <div className='flex flex-col gap-5 mb-24'>
-        {todoCtx.data.map(todo => {
-          return (
-            <div key={todo.id} className='bg-blue-500 text-white p-5 rounded'>
-              <div className='flex justify-between'>
-                <div className='font-bold'>{todo.title}</div>
-                <div className='flex items-center gap-2'>
-                  <div>{todo.time}</div>
-                  <button onClick={()=>{
-                    setIdDelete(todo.id)
-                    setShowModalDelete(!showModalDelete)}
-                  } className='cursor-pointer'>
-                    <FaRegTrashAlt />
-                  </button>
-                </div>
-              </div>
-              <div className='whitespace-pre'>{todo.body}</div>
-            </div>
-          )
-        })}
-      </div>
+      {todoCtx.data.length > 0 && <TodoList />}
     </>
   )
 }
