@@ -1,13 +1,16 @@
 import React from "react"
 
-const ModalContext = React.createContext({
+export const TodoModalContext = React.createContext({
   showModal: false,
-  setShowModal: ()=>{},
-  deleteIndex : null,
-  setDeleteIndex: ()=>{},
-  showDeleteModa: false,
-  setShowDeleteModal: ()=>{}
-
+  setShowModal: ()=>{}
 })
 
-export default ModalContext
+export const DeleteModalContext = React.createContext({
+  showModal: false,
+  setShowModal: ()=>{}
+})
+
+export const EditModalContext = React.createContext({
+  showModal: false,
+  setShowModal: ()=>{}
+})
