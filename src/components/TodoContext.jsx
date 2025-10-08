@@ -1,14 +1,15 @@
-import React from 'react'
+import React from "react";
 
 const TodoContext = React.createContext({
   data: [
     {
+      id: "",
       title: "",
       body: "",
-      time: ""
-    }
+      time: "",
+    },
   ],
-  setData: ()=>{}
-})
+  setData: () => {},
+});
 
-export default TodoContext
+export default TodoContext;
