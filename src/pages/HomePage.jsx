@@ -63,7 +63,7 @@ function HomePage() {
                 <div className="font-bold">{todo.title}</div>
                 <div>
                   <button
-                    className="ml-auto"
+                    className="cursor-pointer"
                     onClick={() => deleteTask(todo.id)}
                   >
                     <IoMdTrash />
