@@ -1,6 +1,7 @@
 import moment from 'moment'
 import React from 'react'
 import TodoContext from '../components/TodoContext'
+import TodoList from '../components/TodoList'
 
 function HomePage() {
   const [selectedDay, setDay] = React.useState(moment().date().toString())
@@ -25,19 +26,7 @@ function HomePage() {
       {todoCtx.data.length === 0 && <div className='flex-1 flex justify-center items-center'>
         <span>No Activity!</span>
       </div>}
-      <div className='flex flex-col gap-5 mb-24'>
-        {todoCtx.data.map(todo => {
-          return (
-            <div className='bg-blue-500 text-white p-5 rounded'>
-              <div className='flex justify-between'>
-                <div className='font-bold'>{todo.title}</div>
-                <div>{todo.time}</div>
-              </div>
-              <div className='whitespace-pre'>{todo.body}</div>
-            </div>
-          )
-        })}
-      </div>
+      {todoCtx.data.length > 0 && <TodoList />}
     </>
   )
 }
