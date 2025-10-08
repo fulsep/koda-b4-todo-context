@@ -1,32 +1,13 @@
 import moment from 'moment'
 import React from 'react'
 import TodoContext from '../components/TodoContext'
-import TodoList from '../components/TodoList'
+import ModalContext from '../components/ModalContext'
 
 function HomePage() {
   const [selectedDay, setDay] = React.useState(moment().date().toString())
   const weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-  const indexTask = React.useRef(null);
-  const confirm = React.useRef(null);
   const todoCtx = React.useContext(TodoContext)
-
-
-  function openConfirm(index) {
-    indexTask.current = index;
-    confirm.current.showModal();
-  }
-
-  function confirmDelete() {
-    const index = indexTask.current;
-    const deleteTask = todoCtx.data.filter((_, i) => i !== index);
-    todoCtx.setData(deleteTask);
-    confirm.current.close();
-  }
-
-  function cancelDelete() {
-    indexTask.current = null;
-    confirm.current.close();
-  }
+  const modalCtx = React.useContext(ModalContext)
 
   return (
     <>
@@ -55,7 +36,10 @@ function HomePage() {
                 <div className='font-bold'>{todo.title}</div>
                 <div className='flex  gap-2'>
                   <div>{todo.time}</div>
-                  <button className='cursor-pointer' onClick={() => openConfirm(index)}>
+                  <button className='cursor-pointer' onClick={() => {
+                    modalCtx.setDeleteIndex(index)
+                    modalCtx.setShowDeleteModal(true)
+                  }}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                       <path fill="none" stroke="#ff3030" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M14 11v6m-4-6v6M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7M4 7h16M7 7l2-4h6l2 4" />
                     </svg>
@@ -68,31 +52,6 @@ function HomePage() {
         })}
       </div>
 
-      <dialog
-        ref={confirm}
-        className="rounded-lg p-5 w-80 backdrop:bg-black/40 shadow-xl m-auto"
-      >
-        <div className="flex justify-between items-center mb-3">
-          <h3 className="text-lg font-semibold">Hapus Task?</h3>
-        </div>
-        <p className="text-sm text-gray-600 mb-5">
-          Apakah kamu yakin ingin menghapus task ini?
-        </p>
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={cancelDelete}
-            className="px-4 py-1 rounded bg-gray-200 hover:bg-gray-300 text-sm"
-          >
-            Batal
-          </button>
-          <button
-            onClick={confirmDelete}
-            className="px-4 py-1 rounded bg-red-500 text-white hover:bg-red-600 text-sm"
-          >
-            Hapus
-          </button>
-        </div>
-      </dialog>
     </>
   )
 }

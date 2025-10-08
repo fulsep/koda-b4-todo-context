@@ -5,13 +5,20 @@ import ModalContext from '../../components/ModalContext'
 import Modal from '../../components/Modal'
 import TodoContext from '../../components/TodoContext'
 import AddTodoForm from '../../components/AddTodoForm'
+import { ModalDelete } from '../../components/ModalDelete'
 
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
+  const [deleteIndex, setDeleteIndex] = React.useState(null)
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false)
   const [todo, setTodo] = React.useState([])
   return (
-    <TodoContext.Provider value={{data:todo, setData: setTodo}}>
-      <ModalContext.Provider value={{showModal, setShowModal}}>
+    <TodoContext.Provider value={{ data: todo, setData: setTodo }}>
+      <ModalContext.Provider value={{
+        showModal, setShowModal,
+        showDeleteModal, setShowDeleteModal,
+        deleteIndex, setDeleteIndex
+      }}>
         <div className='bg-gray-200 min-h-screen relative'>
           <div className='max-w-md w-full mx-auto relative'>
             <div className='p-2 bg-gray-100 min-h-[calc(theme(height.screen)-theme(height.12))] flex flex-col'>
@@ -19,6 +26,7 @@ function Main() {
             </div>
             <Navbar />
             {showModal && <AddTodoModal />}
+            {showDeleteModal && <DeleteTodoModal/> }
           </div>
         </div>
       </ModalContext.Provider>
@@ -26,14 +34,26 @@ function Main() {
   )
 }
 
-const AddTodoModal = ()=>{
+const AddTodoModal = () => {
   const modalCtx = React.useContext(ModalContext)
   const todoCtx = React.useContext(TodoContext)
-  return(
+  return (
     <Modal title="Add New Todo">
-      <AddTodoForm todoCtx={todoCtx} onClose={()=>modalCtx.setShowModal(false)} />
+      <AddTodoForm todoCtx={todoCtx} onClose={() => modalCtx.setShowModal(false)} />
     </Modal>
   )
 }
+
+const DeleteTodoModal = () => {
+  const modalCtx = React.useContext(ModalContext)
+  const todoCtx = React.useContext(TodoContext)
+  return (
+    <Modal title="Delete Todo">
+      <ModalDelete todoCtx={todoCtx} modalCtx={modalCtx}/>
+    </Modal>
+  )
+}
+
+
 
 export default Main
