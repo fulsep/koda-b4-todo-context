@@ -16,7 +16,7 @@ function HomePage() {
           {weeks.map((day, index) => {
             const getDay = moment().day(index+1).date().toString()
             return(
-              <button onClick={()=>setDay(getDay)} className='hover:cursor-pointer flex-1 flex flex-col items-center [&>*:first-child]:text-gray-500 [&>*:last-child]:font-bold'>
+              <button key={index} onClick={()=>setDay(getDay)} className='hover:cursor-pointer flex-1 flex flex-col items-center [&>*:first-child]:text-gray-500 [&>*:last-child]:font-bold'>
                 <span className={selectedDay === getDay ? 'text-[theme(color.blue.500)!important] font-bold':''}>{day}</span>
                 <span className={selectedDay === getDay ? 'text-[theme(color.blue.500)!important] font-bold':''}>{getDay}</span>
               </button>)
