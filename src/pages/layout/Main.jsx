@@ -8,7 +8,19 @@ import AddTodoForm from '../../components/AddTodoForm'
 
 function Main() {
   const [showModal, setShowModal] = React.useState(false)
-  const [todo, setTodo] = React.useState([])
+  const [todo, setTodo] = React.useState(()=>{
+    try{
+      const data = window.localStorage.getItem("todo")
+      return data ? JSON.parse(data) : []
+    }catch(err){
+      console.log(err)
+      return[]
+    }
+  })
+
+  React.useEffect(()=>{
+    window.localStorage.setItem("todo", JSON.stringify(todo))
+  },[todo])
   return (
     <TodoContext.Provider value={{data:todo, setData: setTodo}}>
       <TodoModalContext.Provider value={{showModal, setShowModal}}>
