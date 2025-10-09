@@ -9,3 +9,8 @@ export const DeleteModalContext = React.createContext({
   showModal: false,
   setShowModal: ()=>{}
 })
+
+export const RenameModalContext = React.createContext({
+  showModal: false,
+  setShowModal: () =>{}
+})
